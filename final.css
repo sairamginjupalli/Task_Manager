@@ -1,0 +1,121 @@
+/* General Styles */
+body {
+    font-family: 'Source Sans Pro', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 0;
+    background-color: #f0f8ff; /* Alice Blue */
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f2f2f2; /* Light Gray */
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Typography */
+h1, h2, h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5); /* Soft text shadow */
+    color: #333; /* Dark Gray */
+}
+
+/* Forms */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555; /* Dark Gray */
+}
+
+input[type="text"],
+input[type="datetime-local"],
+button {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 2px solid #8025e0;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 16px;
+    color: #333; /* Dark Gray */
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+    color: #f0f0f0; /* Light Gray */
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #290ed6; /* Changed border-color to border */
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+    color: #333; /* Dark Gray */
+    transition: background-color 0.3s ease; /* Smooth transition for background color change */
+}
+
+th {
+    background-color: #bbba82;
+    font-weight: bold;
+}
+
+/* Hover effect for table cells */
+th:hover,
+td:hover {
+    background-color: #d9d9d9; /* Light Gray */
+}
+
+/* Action Buttons */
+/* Action Buttons */
+.action-cell button {
+    background-color: transparent; /* Set background to transparent */
+    color: #c82333;
+    border: none;
+    padding: 2px; /* Remove padding initially */
+    margin-left: 5px;
+    margin-right: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    align-items: center; /* Center the content vertically */
+}
+
+.action-cell button:hover {
+    background-color: transparent; /* Change background color on hover */
+}
+
+/* Media Query */
+@media screen and (max-width: 600px) {
+    form {
+        width: 90%;
+    }
+    input[type="text"], input[type="datetime-local"], button {
+        width: 100%;
+    }
+}
+
+/* Define the blink animation */
+
