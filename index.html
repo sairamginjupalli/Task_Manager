@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task Manager</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="final.css">
+</head>
+<body>
+<div class="container">
+    <h1>Task Manager</h1>
+    <form id="taskForm">
+        <label for="taskName">Task Name:</label><br>
+        <input type="text" id="taskName" name="taskName" required><br>
+        <label for="deadline">Deadline:</label><br>
+        <input type="datetime-local" id="deadline" name="deadline" min="" required><br><br>
+        <button type="button" onclick="addTask()">Add Task</button>
+    </form>
+    <h2>Tasks</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Deadline</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="taskList">
+        </tbody>
+    </table>
+</div>
+
+<script src="final.js"></script>
+</body>
+</html>
