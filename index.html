@@ -6,11 +6,12 @@
     <title>Task Manager</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="final.css">
-
+  
 </head>
 <body>
     <div class="container">
         <h1>Task Manager</h1>
+        <button onclick="toggleView()">Toggle Calendar View</button>
         <form id="taskForm">
             <label for="taskName">Task Name:</label>
             <input type="text" id="taskName" name="taskName" required>
@@ -20,24 +21,25 @@
             <textarea id="notes" name="notes" rows="3" placeholder="Add additional notes or description..."></textarea>
             <button type="button" onclick="addTask()">Add Task</button>
         </form>
-        <h2>Tasks</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Task Name</th>
-                    <th>Deadline</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="taskList"></tbody>
-        </table>
-    </div>
+        
+        <div id="taskView">
+            <h2>Tasks</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task Name</th>
+                        <th>Deadline</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="taskList"></tbody>
+            </table>
+        </div>
 
-    <div id="notesModal" class="modal">
-        <div class="modal-content">
-            <p id="modalText"></p>
-            <button class="close-btn" onclick="closeModal()">Close</button>
+        <div id="calendarView" class="calendar-container">
+            <h2>Task Calendar</h2>
+            <div class="calendar" id="calendar"></div>
         </div>
     </div>
 
@@ -60,10 +62,12 @@
             
             document.getElementById('taskForm').reset();
             displayTasks();
+            displayCalendar();
         }
         
         function loadTasks() {
             displayTasks();
+            displayCalendar();
         }
         
         function displayTasks() {
@@ -76,7 +80,7 @@
             tasks.forEach((task, index) => {
                 const formattedDeadline = new Date(task.deadline).toLocaleString('en-US', {
                     weekday: 'short',
-                    month: 'long',
+                    month: 'short',
                     day: 'numeric',
                     hour: '2-digit',
                     minute: '2-digit',
@@ -91,36 +95,36 @@
                     <td>
                         <button onclick="completeTask(${index})" class="complete-btn">✔</button>
                         <button onclick="deleteTask(${index})" class="delete-btn">✖</button>
-                        <button onclick="viewNotes(${index})" class="view-notes-btn">
-                            <i class="fas fa-eye"></i>
-                        </button>
                     </td>
                 `;
             });
         }
-        
-        function viewNotes(index) {
-            const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-            document.getElementById("modalText").innerText = "Notes: " + tasks[index].notes;
-            document.getElementById("notesModal").style.display = "flex";
+
+        function displayCalendar() {
+            const calendar = document.getElementById("calendar");
+            calendar.innerHTML = "";
+            let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            let currentMonth = new Date().getMonth();
+            let daysInMonth = new Date(new Date().getFullYear(), currentMonth + 1, 0).getDate();
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                let cell = document.createElement("div");
+                cell.classList.add("day");
+                cell.innerText = day;
+                let dateString = new Date(new Date().getFullYear(), currentMonth, day).toDateString();
+                let hasTask = tasks.some(task => new Date(task.deadline).toDateString() === dateString);
+                if (hasTask) {
+                    cell.classList.add("has-task");
+                }
+                calendar.appendChild(cell);
+            }
         }
 
-        function closeModal() {
-            document.getElementById("notesModal").style.display = "none";
-        }
-
-        function completeTask(index) {
-            const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-            tasks[index].status = "Completed";
-            localStorage.setItem("tasks", JSON.stringify(tasks));
-            displayTasks();
-        }
-        
-        function deleteTask(index) {
-            const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-            tasks.splice(index, 1);
-            localStorage.setItem("tasks", JSON.stringify(tasks));
-            displayTasks();
+        function toggleView() {
+            const taskView = document.getElementById("taskView");
+            const calendarView = document.getElementById("calendarView");
+            taskView.style.display = taskView.style.display === "none" ? "block" : "none";
+            calendarView.style.display = calendarView.style.display === "none" ? "block" : "none";
         }
     </script>
 </body>
