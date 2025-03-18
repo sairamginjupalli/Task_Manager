@@ -6,57 +6,13 @@
     <title>Task Manager</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="final.css">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, rgba(0,0,50,0.8), rgba(0,0,0,0.9));
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 40px;
-            width: 90%;
-            max-width: 1200px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-        }
-        .calendar-container {
-            display: none;
-            margin-top: 20px;
-        }
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-        }
-        .day {
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            text-align: center;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .day.has-task {
-            background: rgba(0, 255, 0, 0.5);
-        }
-    </style>
+   
 </head>
 <body>
     <div class="container">
         <h1>Task Manager</h1>
-        <button onclick="toggleView()">Toggle Calendar View</button>
+        <button onclick="toggleView('taskView')">View Tasks</button>
+        <button onclick="toggleView('calendarView')">View Calendar</button>
         <form id="taskForm">
             <label for="taskName">Task Name:</label>
             <input type="text" id="taskName" name="taskName" required>
@@ -123,23 +79,14 @@
             tasks.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
             
             tasks.forEach((task, index) => {
-                const formattedDeadline = new Date(task.deadline).toLocaleString('en-US', {
-                    weekday: 'short',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: true
-                });
-                
                 const row = taskList.insertRow();
                 row.innerHTML = `
                     <td>${task.name}</td>
-                    <td>${formattedDeadline}</td>
+                    <td>${new Date(task.deadline).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</td>
                     <td>${task.status}</td>
                     <td>
-                        <button onclick="completeTask(${index})" class="complete-btn">✔</button>
-                        <button onclick="deleteTask(${index})" class="delete-btn">✖</button>
+                        <button onclick="completeTask(${index})">✔</button>
+                        <button onclick="deleteTask(${index})">✖</button>
                     </td>
                 `;
             });
@@ -149,27 +96,27 @@
             const calendar = document.getElementById("calendar");
             calendar.innerHTML = "";
             let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-            let currentMonth = new Date().getMonth();
-            let daysInMonth = new Date(new Date().getFullYear(), currentMonth + 1, 0).getDate();
+            let daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
             
             for (let day = 1; day <= daysInMonth; day++) {
                 let cell = document.createElement("div");
                 cell.classList.add("day");
                 cell.innerText = day;
-                let dateString = new Date(new Date().getFullYear(), currentMonth, day).toDateString();
-                let hasTask = tasks.some(task => new Date(task.deadline).toDateString() === dateString);
-                if (hasTask) {
+                let dateString = new Date(new Date().getFullYear(), new Date().getMonth(), day).toDateString();
+                let taskText = tasks.filter(task => new Date(task.deadline).toDateString() === dateString)
+                                    .map(task => task.name).join(', ');
+                if (taskText) {
                     cell.classList.add("has-task");
+                    cell.setAttribute("data-tasks", taskText);
                 }
                 calendar.appendChild(cell);
             }
         }
 
-        function toggleView() {
-            const taskView = document.getElementById("taskView");
-            const calendarView = document.getElementById("calendarView");
-            taskView.style.display = taskView.style.display === "none" ? "block" : "none";
-            calendarView.style.display = calendarView.style.display === "none" ? "block" : "none";
+        function toggleView(view) {
+            document.getElementById("taskView").style.display = "none";
+            document.getElementById("calendarView").style.display = "none";
+            document.getElementById(view).style.display = "block";
         }
     </script>
 </body>
