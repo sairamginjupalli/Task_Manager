@@ -78,7 +78,9 @@
             const taskList = document.getElementById('taskList');
             taskList.innerHTML = "";
             
-            const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            tasks.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+            
             tasks.forEach((task, index) => {
                 const row = taskList.insertRow();
                 row.innerHTML = `
