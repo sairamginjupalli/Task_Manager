@@ -1,4 +1,4 @@
-        body {
+body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
@@ -33,6 +33,8 @@
             border-radius: 10px;
             overflow-x: auto;
             white-space: nowrap;
+            max-width: 100%;
+            overflow-x: scroll;
         }
         .day {
             padding: 10px;
