@@ -1,36 +1,128 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Task Manager</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<link rel="stylesheet" type="text/css" href="final.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="final.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, rgba(0,0,50,0.8), rgba(0,0,0,0.9));
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 1200px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <h1>Task Manager</h1>
-    <form id="taskForm">
-        <label for="taskName">Task Name:</label><br>
-        <input type="text" id="taskName" name="taskName" required><br>
-        <label for="deadline">Deadline:</label><br>
-        <input type="datetime-local" id="deadline" name="deadline" min="" required><br><br>
-        <button type="button" onclick="addTask()">Add Task</button>
-    </form>
-    <h2>Tasks</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Task Name</th>
-                <th>Deadline</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="taskList">
-        </tbody>
-    </table>
-</div>
+    <div class="container">
+        <h1>Task Manager</h1>
+        <form id="taskForm">
+            <label for="taskName">Task Name:</label>
+            <input type="text" id="taskName" name="taskName" required>
+            <label for="deadline">Deadline:</label>
+            <input type="datetime-local" id="deadline" name="deadline" required>
+            <label for="priority">Priority:</label>
+            <select id="priority" name="priority" required>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
+            <label for="notes">Task Notes:</label>
+            <textarea id="notes" name="notes" rows="3" placeholder="Add additional notes or description..."></textarea>
+            <button type="button" onclick="addTask()">Add Task</button>
+        </form>
+        <h2>Tasks</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Task Name</th>
+                    <th>Deadline</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="taskList"></tbody>
+        </table>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", loadTasks);
 
-<script src="final.js"></script>
+        function addTask() {
+            const taskName = document.getElementById('taskName').value;
+            const deadline = document.getElementById('deadline').value;
+            const priority = document.getElementById('priority').value;
+            const notes = document.getElementById('notes').value;
+            
+            if (!taskName || !deadline || !priority) {
+                alert("Please fill out all required fields.");
+                return;
+            }
+            
+            const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            tasks.push({ name: taskName, deadline, priority, notes, status: "Pending" });
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            
+            document.getElementById('taskForm').reset();
+            displayTasks();
+        }
+        
+        function loadTasks() {
+            displayTasks();
+        }
+        
+        function displayTasks() {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = "";
+            
+            const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            tasks.forEach((task, index) => {
+                const row = taskList.insertRow();
+                row.innerHTML = `
+                    <td>${task.name}</td>
+                    <td>${task.deadline}</td>
+                    <td>${task.priority}</td>
+                    <td>${task.status}</td>
+                    <td>
+                        <button onclick="completeTask(${index})" class="complete-btn">✔</button>
+                        <button onclick="deleteTask(${index})" class="delete-btn">✖</button>
+                    </td>
+                `;
+            });
+        }
+        
+        function completeTask(index) {
+            const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            tasks[index].status = "Completed";
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            displayTasks();
+        }
+        
+        function deleteTask(index) {
+            const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            tasks.splice(index, 1);
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            displayTasks();
+        }
+    </script>
 </body>
 </html>
