@@ -22,6 +22,43 @@ max-width: 1200px;
 box-shadow: 0 8px 32px rgba(0,0,0,0.25);
 }
 
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, rgba(0,0,50,0.8), rgba(0,0,0,0.9));
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+  
+        .calendar-container {
+            display: none;
+            margin-top: 20px;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        .day {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .day.has-task {
+            background: rgba(0, 255, 0, 0.5);
+        }
+
 h1, h2 {
 text-align: center;
 color: #00d4ff;}
